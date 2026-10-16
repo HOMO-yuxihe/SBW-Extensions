@@ -67,7 +67,7 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
                         && deltaMovement.angleTo(entity.position()) <= 150
                         && hasLineOfSight(position(),entity.position())
             }
-            val nearest = candidates.minByOrNull { distanceTo(it) }
+            val nearest = candidates.minByOrNull { deltaMovement.angleTo(it.position().subtract(position())) }
             if (nearest != null) {
                 setTargetUuid(nearest.stringUUID)
                 lostTarget=false
