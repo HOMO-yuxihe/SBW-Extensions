@@ -67,10 +67,10 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
                         && entity != owner                              // 排除发射者
                         && entity != owner?.vehicle                     // 排除发射者所在的载具
                         && !entity.getPassengers().contains(owner)      // 排除载着发射者的实体
-                        && deltaMovement.angleTo(entity.position().subtract(position())) <= 45
-                        && hasLineOfSight(position(),entity.position())
+                        && deltaMovement.angleTo(entity.boundingBox.center.subtract(boundingBox.center)) <= 45
+                        && hasLineOfSight(boundingBox.center,entity.boundingBox.center)
             }
-            val nearest = candidates.minByOrNull { deltaMovement.angleTo(it.position().subtract(position())) }
+            val nearest = candidates.minByOrNull { deltaMovement.angleTo(it.boundingBox.center.subtract(boundingBox.center)) }
             if (nearest != null) {
                 setTargetUuid(nearest.stringUUID)
                 lostTarget=false
@@ -86,7 +86,7 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
 
             val entity=EntityFindUtil.findEntity(level(),targetUUID)
             if (entity != null && this.targetUUID != "none") {
-                if (!hasLineOfSight(position(),entity.position()) or (deltaMovement.angleTo(entity.position().subtract(position())) >= 120)){
+                if (!hasLineOfSight(boundingBox.center,entity.boundingBox.center) or (deltaMovement.angleTo(entity.boundingBox.center.subtract(boundingBox.center)) >= 120)){
                     val msg = Component.literal("丢失目标: ").append(entity.displayName)
                     level().players().forEach { player ->
                         if (player is ServerPlayer) {
@@ -121,7 +121,7 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
                     entity.z
                 )
                 val toVec = calculateFiringSolution(
-                    position(),
+                    boundingBox.center,
                     targetPos,
                     entity.deltaMovement,
                     deltaMovement.length(),
