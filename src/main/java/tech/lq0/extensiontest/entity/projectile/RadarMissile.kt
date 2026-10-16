@@ -86,6 +86,23 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
 
             val entity=EntityFindUtil.findEntity(level(),targetUUID)
             if (entity != null && this.targetUUID != "none") {
+                if (!hasLineOfSight(position(),entity.position()) or (deltaMovement.angleTo(entity.position().subtract(position())) >= 120)){
+                    val msg = Component.literal("丢失目标: ").append(entity.displayName)
+                    level().players().forEach { player ->
+                        if (player is ServerPlayer) {
+                            player.sendSystemMessage(msg)
+                        }
+                    }
+                    lostTarget=true
+                    targetUUID="none"
+                    return
+                }
+
+                val tg = entity as? LivingEntity
+                if (tg != null) {
+                    tg.addEffect(MobEffectInstance(MobEffects.GLOWING,4,0))
+                }
+
                 if ((entity.getPassengers().isNotEmpty() || entity is VehicleEntity)
                     && entity.tickCount % (max(0.04 * this.distanceTo(entity), 2.0).toInt()) == 0
                 ) {
@@ -111,17 +128,8 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
                     0.0
                 )
                 turn(toVec, 15f)
-                this.deltaMovement = this.deltaMovement.scale(0.05).add(lookAngle.scale(8.0))
+                this.deltaMovement = this.deltaMovement.scale(0.05).add(lookAngle.scale(6.0))
             }
-            if (entity == null) {
-                lostTarget=true
-                targetUUID="none"
-                lostTargetTick++
-            }
-        }
-        if(lostTargetTick>=100){
-            causeExplode(position())
-            discard()
         }
     }
 
