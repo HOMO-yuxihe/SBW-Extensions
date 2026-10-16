@@ -14,8 +14,11 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.animal.Pig
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon
 import net.minecraft.world.item.Item
@@ -29,7 +32,7 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
         MissileProjectile(type, level), BasicGeoProjectileEntity {
 
     private var lostTargetTick: Int
-    var searchRange=32.0
+    var searchRange=48.0
 
     init {
         this.noCulling = true
@@ -57,14 +60,14 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
         if((lostTarget || (targetUUID == "none")) && tickCount >= 5){
             val candidates = level().getEntitiesOfClass(
                 Entity::class.java,
-                boundingBox.inflate(searchRange)
+                boundingBox.inflate(searchRange).move(deltaMovement.scale(8.0))
             ) { entity ->
                 entity.isAlive
                         && entity != this
                         && entity != owner                              // 排除发射者
                         && entity != owner?.vehicle                     // 排除发射者所在的载具
                         && !entity.getPassengers().contains(owner)      // 排除载着发射者的实体
-                        && deltaMovement.angleTo(entity.position()) <= 150
+                        && deltaMovement.angleTo(entity.position().subtract(position())) <= 45
                         && hasLineOfSight(position(),entity.position())
             }
             val nearest = candidates.minByOrNull { deltaMovement.angleTo(it.position().subtract(position())) }
