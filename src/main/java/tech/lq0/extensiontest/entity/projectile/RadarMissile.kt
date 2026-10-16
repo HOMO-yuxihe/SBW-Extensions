@@ -75,7 +75,7 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
                 setTargetUuid(nearest.stringUUID)
                 lostTarget=false
 
-                val msg = Component.literal("Target: ${targetUUID}, Distance: ${distanceTo(nearest)}, Name: ${nearest.name}")
+                val msg = Component.literal("锁定目标: ").append(nearest.displayName).append(Component.literal("距离: ${distanceTo(nearest)}"))
                 level().players().forEach { player ->
                     if (player is ServerPlayer) {
                         player.sendSystemMessage(msg)
