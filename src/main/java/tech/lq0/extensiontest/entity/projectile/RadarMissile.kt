@@ -48,10 +48,10 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
     }
 
     override fun tick() {
-        if (level().isClientSide) return
         super.tick()
 
         mediumTrail()
+        if (level().isClientSide) return
 
         fun hasLineOfSight(from: Vec3, to: Vec3): Boolean {
             val result = level().clip(
