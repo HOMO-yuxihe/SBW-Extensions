@@ -10,7 +10,6 @@ import com.atsuishio.superbwarfare.tools.EntityFindUtil
 import com.atsuishio.superbwarfare.tools.RangeTool.calculateFiringSolution
 import com.atsuishio.superbwarfare.tools.angleTo
 import net.minecraft.network.chat.Component
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
@@ -30,11 +29,7 @@ import net.minecraft.world.phys.Vec3
 import kotlin.math.max
 
 fun sendMsg(msg: Component,level: Level){
-    level.players().forEach { player ->
-        if (player is ServerPlayer) {
-            player.sendSystemMessage(msg)
-        }
-    }
+    println(msg.getString())
 }
 
 open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
