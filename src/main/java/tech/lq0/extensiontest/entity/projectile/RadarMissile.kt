@@ -89,6 +89,14 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
         }else{
 
             val entity=EntityFindUtil.findEntity(level(),targetUUID)
+
+            if (entity == null) {
+                sendMsg(Component.literal("丢失目标: $targetUUID"),level())
+                lostTarget=true
+                targetUUID="none"
+                return
+            }
+
             if (entity != null && this.targetUUID != "none") {
                 if (!hasLineOfSight(boundingBox.center,entity.boundingBox.center) or (deltaMovement.angleTo(entity.boundingBox.center.subtract(boundingBox.center)) >= 120)){
                     sendMsg(Component.literal("丢失目标: ").append(entity.displayName),level())
