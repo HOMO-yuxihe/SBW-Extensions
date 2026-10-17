@@ -97,10 +97,12 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
                     return
                 }
 
-                val tg = entity as? LivingEntity
-                if (tg != null) {
-                    tg.addEffect(MobEffectInstance(MobEffects.GLOWING,4,0))
-                }
+                sendMsg(
+                    Component.literal("追踪目标: ").append(entity.displayName)
+                        .append(Component.literal("距离: ${distanceTo(entity)}")), level()
+                )
+
+                (entity as? LivingEntity)?.addEffect(MobEffectInstance(MobEffects.GLOWING, 4, 0))
 
                 if ((entity.getPassengers().isNotEmpty() || entity is VehicleEntity)
                     && entity.tickCount % (max(0.04 * this.distanceTo(entity), 2.0).toInt()) == 0
