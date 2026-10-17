@@ -67,7 +67,7 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
             return result.type == HitResult.Type.MISS  // MISS = 没有阻挡
         }
 
-        if((lostTarget || (targetUUID == "none")) && tickCount >= 5){
+        if((lostTarget || (targetUUID == "none"))){
             val candidates = level().getEntitiesOfClass(
                 Entity::class.java,
                 boundingBox.inflate(searchRange).move(deltaMovement.scale(8.0))
