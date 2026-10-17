@@ -28,6 +28,14 @@ import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import kotlin.math.max
 
+fun sendMsg(msg: Component,level: Level){
+    level.players().forEach { player ->
+        if (player is ServerPlayer) {
+            player.sendSystemMessage(msg)
+        }
+    }
+}
+
 open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
         MissileProjectile(type, level), BasicGeoProjectileEntity {
 
@@ -75,24 +83,14 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
                 setTargetUuid(nearest.stringUUID)
                 lostTarget=false
 
-                val msg = Component.literal("锁定目标: ").append(nearest.displayName).append(Component.literal("距离: ${distanceTo(nearest)}"))
-                level().players().forEach { player ->
-                    if (player is ServerPlayer) {
-                        player.sendSystemMessage(msg)
-                    }
-                }
+                sendMsg(Component.literal("锁定目标: ").append(nearest.displayName).append(Component.literal("距离: ${distanceTo(nearest)}")),level())
             }
         }else{
 
             val entity=EntityFindUtil.findEntity(level(),targetUUID)
             if (entity != null && this.targetUUID != "none") {
                 if (!hasLineOfSight(boundingBox.center,entity.boundingBox.center) or (deltaMovement.angleTo(entity.boundingBox.center.subtract(boundingBox.center)) >= 120)){
-                    val msg = Component.literal("丢失目标: ").append(entity.displayName)
-                    level().players().forEach { player ->
-                        if (player is ServerPlayer) {
-                            player.sendSystemMessage(msg)
-                        }
-                    }
+                    sendMsg(Component.literal("丢失目标: ").append(entity.displayName),level())
                     lostTarget=true
                     targetUUID="none"
                     return
