@@ -48,6 +48,7 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
     }
 
     override fun tick() {
+        if (level().isClientSide) return
         super.tick()
 
         mediumTrail()
