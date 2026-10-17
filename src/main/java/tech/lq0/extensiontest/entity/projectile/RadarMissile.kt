@@ -20,6 +20,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.animal.Pig
+import net.minecraft.world.entity.boss.EnderDragonPart
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.ClipContext
@@ -78,6 +79,7 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
                         && !entity.getPassengers().contains(owner)      // 排除载着发射者的实体
                         && deltaMovement.angleTo(entity.boundingBox.center.subtract(boundingBox.center)) <= 45
                         && hasLineOfSight(boundingBox.center,entity.boundingBox.center)
+                        && entity !is EnderDragonPart
             }
             val nearest = candidates.minByOrNull { deltaMovement.angleTo(it.boundingBox.center.subtract(boundingBox.center)) }
             if (nearest != null) {
