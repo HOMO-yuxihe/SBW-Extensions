@@ -8,11 +8,8 @@ buildscript {
 plugins {
     id 'eclipse'
     id 'idea'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
-    id 'org.spongepowered.mixin' version '0.7.+'          // 如果你不用 Mixin，可以删掉这行
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    // 如果需要 Kotlin，取消下面这行的注释，并选择与 KFF 4.11.0 兼容的版本（如 2.0.0）
-     id 'org.jetbrains.kotlin.jvm' version '2.0.0'
+    id 'net.neoforged.moddev.legacyforge' version '2.0.91' // 添加
+    id 'org.jetbrains.kotlin.jvm' version '2.0.0'
 }
 
 group = mod_group_id
@@ -26,45 +23,34 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
-    copyIdeResources = true
+legacyForge {
+    version = "${minecraft_version}-${forge_version}" // Forge版本
+
+    parchment {
+        minecraftVersion = project.minecraft_version
+        mappingsVersion = "2023.08.13" // Parchment映射版本
+    }
 
     runs {
-        configureEach {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            // 如果你有 mixin 配置文件，改成你自己的文件名；没有就删掉这行
-            // arg "-mixin.config=extensiontest.mixins.json"
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
         client {
-            property 'forge.enabledGameTestNamespaces', mod_id
-            // 如果遇到 Ponder 的 Mixin 映射问题，可以加上这两行
-            // property 'mixin.env.remapRefMap', 'true'
-            // property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            client()
+            systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
         }
-
         server {
-            property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
+            server()
+            programArgument '--nogui'
         }
-
-        gameTestServer {
-            property 'forge.enabledGameTestNamespaces', mod_id
-        }
-
         data {
-            workingDirectory project.file('run-data')
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            data()
+            programArguments.addAll '--mod', project.mod_id, '--all',
+                    '--output', file('src/generated/resources/').getAbsolutePath(),
+                    '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
         }
     }
 }
@@ -95,27 +81,33 @@ repositories {
         name = 'Kotlin for Forge'
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
     }
+
+    maven {
+        url = uri("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
+    }
+    maven {
+        url = uri("https://maven.createmod.net")
+    }
+
     mavenCentral()
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
     // Curios：API 用于编译，完整版用于运行
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.4.2+1.20.1")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.4.2+1.20.1:api")
+    modRuntimeOnly "top.theillusivec4.curios:curios-forge:5.4.2+1.20.1"
+    modCompileOnly "top.theillusivec4.curios:curios-forge:5.4.2+1.20.1:api"
 
     // GeckoLib
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.4.6')
+    modImplementation "software.bernie.geckolib:geckolib-forge-1.20.1:4.4.6"
 
     // 卓越前线：版本号请换成你实际使用的文件 ID
-    implementation fg.deobf("curse.maven:superb-warfare-1218165:8104849")
+    modImplementation "curse.maven:superb-warfare-1218165:8104849"
 
     // Kotlin for Forge：与 SBW 0.8.9 配套的 4.11.0
-    implementation "thedarkcolour:kotlinforforge:4.11.0"
+    modImplementation "thedarkcolour:kotlinforforge:4.11.0"
 
     // 如果你启用了 Kotlin 插件，加上标准库
-     implementation "org.jetbrains.kotlin:kotlin-stdlib:2.0.0"
+    modImplementation "org.jetbrains.kotlin:kotlin-stdlib:2.0.0"
 }
 
 tasks.named('processResources', ProcessResources).configure {
