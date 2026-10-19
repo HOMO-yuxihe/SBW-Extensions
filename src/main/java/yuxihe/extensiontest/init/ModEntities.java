@@ -1,4 +1,4 @@
-package tech.lq0.extensiontest.init;
+package yuxihe.extensiontest.init;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -6,8 +6,8 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import tech.lq0.extensiontest.ExtensionTest;
-import tech.lq0.extensiontest.entity.projectile.RadarMissile;
+import yuxihe.extensiontest.ExtensionTest;
+import yuxihe.extensiontest.entity.projectile.RadarMissile;
 
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, ExtensionTest.MODID);
