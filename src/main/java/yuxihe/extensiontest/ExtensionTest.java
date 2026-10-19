@@ -1,4 +1,4 @@
-package tech.lq0.extensiontest;
+package yuxihe.extensiontest;
 
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
@@ -7,8 +7,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
-import tech.lq0.extensiontest.init.ModEntities;
-import tech.lq0.extensiontest.init.ModTabs;
+import yuxihe.extensiontest.init.ModEntities;
+import yuxihe.extensiontest.init.ModTabs;
 
 //                          _ooOoo_                               //
 //                         o8888888o                              //

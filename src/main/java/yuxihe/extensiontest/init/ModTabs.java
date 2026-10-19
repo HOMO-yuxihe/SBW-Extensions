@@ -1,14 +1,9 @@
-package tech.lq0.extensiontest.init;
+package yuxihe.extensiontest.init;
 
-import com.atsuishio.superbwarfare.init.ModItems;
-import com.atsuishio.superbwarfare.item.container.ContainerBlockItem;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
-import tech.lq0.extensiontest.ExtensionTest;
+import yuxihe.extensiontest.ExtensionTest;
 
 @SuppressWarnings("unused")
 public class ModTabs {

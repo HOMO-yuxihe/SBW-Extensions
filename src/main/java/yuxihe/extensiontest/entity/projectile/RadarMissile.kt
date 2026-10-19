@@ -1,4 +1,4 @@
-package tech.lq0.extensiontest.entity.projectile
+package yuxihe.extensiontest.entity.projectile
 
 import com.atsuishio.superbwarfare.entity.projectile.BasicGeoProjectileEntity
 import com.atsuishio.superbwarfare.entity.projectile.MissileProjectile

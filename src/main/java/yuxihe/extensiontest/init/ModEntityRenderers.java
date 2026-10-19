@@ -1,4 +1,4 @@
-package tech.lq0.extensiontest.init;
+package yuxihe.extensiontest.init;
 
 import com.atsuishio.superbwarfare.client.renderer.projectile.BasicProjectileRenderer;
 import net.minecraftforge.api.distmarker.Dist;
