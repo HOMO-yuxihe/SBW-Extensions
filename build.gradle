@@ -101,7 +101,7 @@ dependencies {
     modImplementation "software.bernie.geckolib:geckolib-forge-1.20.1:4.4.6"
 
     // 卓越前线：版本号请换成你实际使用的文件 ID
-    modImplementation "curse.maven:superb-warfare-1218165:8104849"
+    modImplementation "curse.maven:superb-warfare-1218165:9019882"
 
     // Kotlin for Forge：与 SBW 0.8.9 配套的 4.11.0
     modImplementation "thedarkcolour:kotlinforforge:4.11.0"

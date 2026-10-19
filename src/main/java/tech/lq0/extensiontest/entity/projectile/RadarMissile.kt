@@ -5,7 +5,6 @@ import com.atsuishio.superbwarfare.entity.projectile.MissileProjectile
 import com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity
 import com.atsuishio.superbwarfare.init.ModItems
 import com.atsuishio.superbwarfare.init.ModSounds
-import com.atsuishio.superbwarfare.resource.BedrockModelLoader
 import com.atsuishio.superbwarfare.tools.EntityFindUtil
 import com.atsuishio.superbwarfare.tools.RangeTool.calculateFiringSolution
 import com.atsuishio.superbwarfare.tools.angleTo
@@ -35,12 +34,10 @@ fun sendMsg(msg: Component,level: Level){
 open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
         MissileProjectile(type, level), BasicGeoProjectileEntity {
 
-    private var lostTargetTick: Int
     var searchRange=48.0
 
     init {
         this.noCulling = true
-        this.lostTargetTick=0
     }
 
     override fun tick() {
@@ -62,7 +59,7 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
             return result.type == HitResult.Type.MISS  // MISS = 没有阻挡
         }
 
-        if((lostTarget || (targetUUID == "none"))){
+        if((isLostTarget() || (getTargetUUID() == "none"))){
             val candidates = level().getEntitiesOfClass(
                 Entity::class.java,
                 boundingBox.inflate(searchRange).move(deltaMovement.scale(8.0))
@@ -79,26 +76,26 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
             val nearest = candidates.minByOrNull { deltaMovement.angleTo(it.boundingBox.center.subtract(boundingBox.center)) }
             if (nearest != null) {
                 setTargetUuid(nearest.stringUUID)
-                lostTarget=false
+                setLostTarget(false)
 
                 sendMsg(Component.literal("锁定目标: ").append(nearest.displayName).append(Component.literal("距离: ${distanceTo(nearest)}")),level())
             }
         }else{
 
-            val entity=EntityFindUtil.findEntity(level(),targetUUID)
+            val entity=EntityFindUtil.findEntity(level(),getTargetUUID())
 
             if (entity == null) {
-                sendMsg(Component.literal("丢失目标: $targetUUID"),level())
-                lostTarget=true
-                targetUUID="none"
+                sendMsg(Component.literal("丢失目标: ${getTargetUUID()}"),level())
+                setLostTarget(true)
+                setTargetUuid("none")
                 return
             }
 
-            if (entity != null && this.targetUUID != "none") {
+            if (entity != null && getTargetUUID() != "none") {
                 if (!hasLineOfSight(boundingBox.center,entity.boundingBox.center) or (deltaMovement.angleTo(entity.boundingBox.center.subtract(boundingBox.center)) >= 120)){
                     sendMsg(Component.literal("丢失目标: ").append(entity.displayName),level())
-                    lostTarget=true
-                    targetUUID="none"
+                    setLostTarget(true)
+                    setTargetUuid("none")
                     return
                 }
 
@@ -150,6 +147,4 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
     override fun getVolume(): Float {
         return 0.4f
     }
-
-    override fun getModel() = BedrockModelLoader.RU_9M336_MISSILE_MODEL
 }
