@@ -8,6 +8,7 @@ import com.atsuishio.superbwarfare.init.ModSounds
 import com.atsuishio.superbwarfare.tools.EntityFindUtil
 import com.atsuishio.superbwarfare.tools.RangeTool.calculateFiringSolution
 import com.atsuishio.superbwarfare.tools.angleTo
+import com.mojang.logging.LogUtils
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
@@ -27,12 +28,13 @@ import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import kotlin.math.max
 
-fun sendMsg(msg: Component,level: Level){
-    println(msg.getString())
-}
 
 open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
         MissileProjectile(type, level), BasicGeoProjectileEntity {
+
+    companion object {
+        private val LOGGER = LogUtils.getLogger()
+    }
 
     var searchRange=48.0
 
@@ -78,14 +80,14 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
                 setTargetUuid(nearest.stringUUID)
                 setLostTarget(false)
 
-                sendMsg(Component.literal("锁定目标: ").append(nearest.displayName).append(Component.literal("距离: ${distanceTo(nearest)}")),level())
+                LOGGER.debug(Component.literal("锁定目标: ").append(nearest.displayName).append(Component.literal("距离: ${distanceTo(nearest)}")).getString())
             }
         }else{
 
             val entity=EntityFindUtil.findEntity(level(),getTargetUUID())
 
             if (entity == null) {
-                sendMsg(Component.literal("丢失目标: ${getTargetUUID()}"),level())
+                LOGGER.debug(Component.literal("丢失目标: ${getTargetUUID()}").getString())
                 setLostTarget(true)
                 setTargetUuid("none")
                 return
@@ -93,15 +95,15 @@ open class RadarMissile(type: EntityType<out RadarMissile>, level: Level) :
 
             if (getTargetUUID() != "none") {
                 if (!hasLineOfSight(boundingBox.center,entity.boundingBox.center) or (deltaMovement.angleTo(entity.boundingBox.center.subtract(boundingBox.center)) >= 120)){
-                    sendMsg(Component.literal("丢失目标: ").append(entity.displayName),level())
+                    LOGGER.debug(Component.literal("丢失目标: ").append(entity.displayName).getString())
                     setLostTarget(true)
                     setTargetUuid("none")
                     return
                 }
 
-                sendMsg(
+                LOGGER.debug(
                     Component.literal("追踪目标: ").append(entity.displayName)
-                        .append(Component.literal("距离: ${distanceTo(entity)}")), level()
+                        .append(Component.literal("距离: ${distanceTo(entity)}")).getString()
                 )
 
                 (entity as? LivingEntity)?.addEffect(MobEffectInstance(MobEffects.GLOWING, 4, 0))
