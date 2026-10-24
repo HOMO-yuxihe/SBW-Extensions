@@ -35,6 +35,8 @@ legacyForge {
         client {
             client()
             systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+            logLevel = org.slf4j.event.Level.DEBUG
+            systemProperty 'forge.logging.console.level', 'debug'
         }
         server {
             server()
