@@ -1,0 +1,19 @@
+{
+    "id": "superbwarfare:ztz_99a",
+    "Weapons": {
+        "Cannon": [
+            {
+                "name": "125mm Cannon"
+            },
+            {
+                "name": "Gun-launched Missile‌",
+                "Override": {
+                    "Damage": 500,
+                    "Projectile": "extensiontest:radar_missile",
+                    "Velocity": 10
+                },
+                "AmmoType":["extensiontest:radar_missile"]
+            }
+        ]
+    }
+}

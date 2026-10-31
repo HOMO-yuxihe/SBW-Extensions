@@ -2,11 +2,16 @@ package yuxihe.extensiontest;
 
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.slf4j.Logger;
+import yuxihe.extensiontest.command.WeaponPresetCommand;
+import yuxihe.extensiontest.data.WeaponPresetLoader;
 import yuxihe.extensiontest.init.ModEntities;
 import yuxihe.extensiontest.init.ModTabs;
 
@@ -49,6 +54,15 @@ public class ExtensionTest {
         bus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
+    }
+    @SubscribeEvent
+    public void onAddReloadListener(AddReloadListenerEvent event) {
+        event.addListener(new WeaponPresetLoader());
+    }
+
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event) {
+        WeaponPresetCommand.register(event.getDispatcher());
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
