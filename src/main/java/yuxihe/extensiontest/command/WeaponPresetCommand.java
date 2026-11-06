@@ -85,11 +85,8 @@ public class WeaponPresetCommand {
                 }
                 CompoundTag gunDataTag = tag.getCompound("GunData");
                 String overrideJson = selected.getOverrideJson();
-                if (overrideJson != null) {
-                    gunDataTag.putString("Override", overrideJson);
-                } else {
-                    gunDataTag.remove("Override");
-                }
+                if(overrideJson == null)overrideJson = "";
+                gunDataTag.putString("Override", overrideJson);
             });
 
             // 6. 记录当前选中的预设名，供 UI 显示和读档恢复
