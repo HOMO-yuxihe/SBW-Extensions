@@ -6,13 +6,20 @@
                 "name": "125mm Cannon"
             },
             {
-                "name": "Gun-launched Missile‌",
+                "name": "Gun-launched Missile",
                 "Override": {
                     "Damage": 500,
                     "Projectile": "extensiontest:radar_missile",
                     "Velocity": 10
                 },
                 "AmmoType":["extensiontest:radar_missile"]
+            },
+            {
+                "name": "125MM APFSDS",
+                "Override": {
+                    "Damage": 800,
+                    "Velocity": 50
+                }
             }
         ]
     }
