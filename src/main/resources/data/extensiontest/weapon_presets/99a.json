@@ -10,9 +10,10 @@
                 "Override": {
                     "Damage": 500,
                     "Projectile": "extensiontest:radar_missile",
-                    "Velocity": 10
-                },
-                "AmmoType":["extensiontest:radar_missile"]
+                    "Velocity": 1,
+                    "AmmoType": ["extensiontest:radar_missile"],
+                    "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/missile_9m120.png"
+                }
             },
             {
                 "name": "125MM APFSDS",
