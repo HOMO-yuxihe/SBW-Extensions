@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import yuxihe.extensiontest.command.WeaponPresetCommand;
 import yuxihe.extensiontest.data.WeaponPresetLoader;
 import yuxihe.extensiontest.init.ModEntities;
+import yuxihe.extensiontest.init.ModItems;
 import yuxihe.extensiontest.init.ModTabs;
 
 //                          _ooOoo_                               //
@@ -46,6 +47,9 @@ public class ExtensionTest {
 
         // Register entities for your extension mod
         ModEntities.REGISTRY.register(bus);
+
+        // Register items (ammo / projectiles)
+        ModItems.AMMO.register(bus);
 
         // Register a separate tab
         // TODO directly register into SuperbWarfare's containers

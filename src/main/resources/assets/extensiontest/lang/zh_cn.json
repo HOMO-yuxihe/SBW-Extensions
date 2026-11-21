@@ -1,3 +1,9 @@
 {
-  "entity.extensiontest.radar_missile": "雷达制导导弹"
+  "item.extensiontest.radar_missile": "雷达制导导弹",
+  "entity.extensiontest.radar_missile": "雷达制导导弹",
+  "key.extensiontest.second_skill": "载具第二技能",
+  "key.categories.extensiontest": "扩展测试",
+  "tips.extensiontest.second_skill.repair": "修理就绪",
+  "tips.extensiontest.second_skill.defense": "主动防御就绪",
+  "tips.extensiontest.second_skill.reloading": "第二技能冷却 %.1f 秒 [%s]"
 }

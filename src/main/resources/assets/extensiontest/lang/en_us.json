@@ -1,3 +1,9 @@
 {
-  "entity.extensiontest.radar_missile": "Radar guided missile"
+  "item.extensiontest.radar_missile": "Radar Missile",
+  "entity.extensiontest.radar_missile": "Radar guided missile",
+  "key.extensiontest.second_skill": "Vehicle Second Skill",
+  "key.categories.extensiontest": "Extension Test",
+  "tips.extensiontest.second_skill.repair": "Repair Ready",
+  "tips.extensiontest.second_skill.defense": "Active Defense Ready",
+  "tips.extensiontest.second_skill.reloading": "Second skill cooldown %.1fs [%s]"
 }
