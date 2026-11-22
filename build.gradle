@@ -59,11 +59,11 @@ legacyForge {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-// 如果你有 mixin，保留这个块并改成你自己的文件名；没有就删掉
-// mixin {
-//     add sourceSets.main, "extensiontest.refmap.json"
-//     config "extensiontest.mixins.json"
-// }
+// Mixin 配置：扩展需要注入 SBW 的按键链路 / 载具 tick / HUD 渲染
+mixin {
+    add sourceSets.main, "extensiontest.refmap.json"
+    config "extensiontest.mixins.json"
+}
 
 repositories {
     maven {
@@ -95,6 +95,17 @@ repositories {
 }
 
 dependencies {
+    // Mixin 注解处理器：生成 refmap，混淆环境下 @At/@ModifyVariable 目标才能正确映射。
+    // mixin 0.8.5 的 fat jar 自带处理器，但需显式提供它的运行时依赖。
+    annotationProcessor "org.spongepowered:mixin:0.8.5"
+    annotationProcessor "com.google.code.gson:gson:2.10.1"
+    annotationProcessor "com.google.guava:guava:31.1-jre"
+    annotationProcessor "org.ow2.asm:asm:9.5"
+    annotationProcessor "org.ow2.asm:asm-tree:9.5"
+    annotationProcessor "org.ow2.asm:asm-commons:9.5"
+    annotationProcessor "org.ow2.asm:asm-util:9.5"
+    annotationProcessor "org.ow2.asm:asm-analysis:9.5"
+
     // Curios：API 用于编译，完整版用于运行
     modRuntimeOnly "top.theillusivec4.curios:curios-forge:5.4.2+1.20.1"
     modCompileOnly "top.theillusivec4.curios:curios-forge:5.4.2+1.20.1:api"
@@ -144,8 +155,8 @@ tasks.named('jar', Jar).configure {
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : mod_authors,
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                // 如果你有 mixin，加上这行；没有就删掉
-                // "MixinConfigs"            : "extensiontest.mixins.json"
+                // Mixin 配置文件必须写进 manifest，否则 Forge 不会加载 mixins.json
+                "MixinConfigs"            : "extensiontest.mixins.json"
         ])
     }
     finalizedBy 'reobfJar'

@@ -1,12 +1,15 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "tech.lq0.extensiontest.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "package": "yuxihe.extensiontest.mixin",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "extensiontest.refmap.json",
   "mixins": [
+    "VehicleEntityMixin"
   ],
   "client": [
+    "ClientEventHandlerMixin",
+    "VehicleMainWeaponHudOverlayMixin"
   ],
   "injectors": {
     "defaultRequire": 1
