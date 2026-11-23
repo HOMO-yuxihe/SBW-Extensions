@@ -2,12 +2,6 @@ package yuxihe.extensiontest.mixin;
 
 import com.atsuishio.superbwarfare.client.overlay.RenderContext;
 import com.atsuishio.superbwarfare.client.overlay.VehicleMainWeaponHudOverlay;
-import com.atsuishio.superbwarfare.client.overlay.weapon.AircraftHud;
-import com.atsuishio.superbwarfare.client.overlay.weapon.ArtilleryHud;
-import com.atsuishio.superbwarfare.client.overlay.weapon.HelicopterHud;
-import com.atsuishio.superbwarfare.client.overlay.weapon.KirovHud;
-import com.atsuishio.superbwarfare.client.overlay.weapon.LandVehicleHud;
-import com.atsuishio.superbwarfare.client.overlay.weapon.OldAircraftHud;
 import com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
@@ -26,6 +20,9 @@ import yuxihe.extensiontest.client.SecondSkillOverlayHelper;
  * TAIL 只匹配方法体最终返回点，这些路径全部跳过，导致「G 键能用但提示不显示」。
  * RETURN 会注入到每一个返回指令之前，且每个提前返回前都已 popPose()，
  * poseStack 处于干净状态，可直接用绝对坐标绘制。</p>
+ *
+ * <p>位置策略：第一/第三人称都画在 SBW 诱饵指示的正下方一行——复现诱饵的准星投影锚点、
+ * scale(0.75) 与字体，仅把局部 y 下移一个行高。</p>
  */
 @Mixin(VehicleMainWeaponHudOverlay.class)
 public abstract class VehicleMainWeaponHudOverlayMixin {
@@ -38,37 +35,15 @@ public abstract class VehicleMainWeaponHudOverlayMixin {
             return;
         }
 
-        int sw = context.getScreenWidth();
-        int sh = context.getScreenHeight();
-        String hudType = vehicleEntity.computed().getHudType();
-
-        // 与 SBW 各武器 HUD 里 DecoyOverlayHelper 的调用坐标一致，y 再下移一行（行高 9 + 2 间距）。
-        int x;
-        int y;
-        if (LandVehicleHud.ID.equals(hudType)) {            // 99A 等地面载具
-            x = sw / 2 - 165;
-            y = sh / 2 - 25;
-        } else if (HelicopterHud.ID.equals(hudType)) {
-            x = sw / 2 - 160;
-            y = sh / 2 - 39;
-        } else if (AircraftHud.ID.equals(hudType)) {
-            x = 72;
-            y = 11;
-        } else if (KirovHud.ID.equals(hudType) || OldAircraftHud.ID.equals(hudType)) {
-            x = 25;
-            y = 12;
-        } else {
-            // ArtilleryHud 本身没有诱饵提示，沿用地面载具坐标作为兜底。
-            x = sw / 2 - 165;
-            y = sh / 2 - 25;
-        }
-
-        SecondSkillOverlayHelper.renderThirdPerson(
+        // 第一人称：绝对屏幕坐标 (sw/2-165, sh/2-26)；第三人称：跟随 SBW 诱饵准星锚点。
+        SecondSkillOverlayHelper.renderBelowDecoy(
                 vehicleEntity,
                 context.getGuiGraphics(),
-                x,
-                y,
-                -1
+                player,
+                context.getPartialTick(),
+                context.isFirstPerson(),
+                -1,
+                context
         );
     }
 }
