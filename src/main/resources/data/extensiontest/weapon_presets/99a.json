@@ -12,7 +12,8 @@
                     "Projectile": "extensiontest:radar_missile",
                     "Velocity": 1,
                     "AmmoType": ["extensiontest:radar_missile"],
-                    "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/missile_9m120.png"
+                    "Icon": "superbwarfare:textures/overlay/vehicle/weapon/icons/missile_9m120.png",
+                    "ProjectileLife": 400
                 }
             },
             {
