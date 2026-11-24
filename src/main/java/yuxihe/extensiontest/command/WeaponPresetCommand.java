@@ -89,6 +89,7 @@ public class WeaponPresetCommand {
                     overrideJson = "{}";
                 }
                 gunDataTag.putString("Override", overrideJson);
+                gunData.reload.setTime(2);
                 gunData.nbtVersion.invalidateStructural();
             });
 
