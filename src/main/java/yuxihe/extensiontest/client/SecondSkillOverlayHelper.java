@@ -14,6 +14,8 @@ import yuxihe.extensiontest.init.ModSecondSkillKeys;
 import yuxihe.extensiontest.skill.ISecondSkillVehicle;
 import yuxihe.extensiontest.skill.SecondSkillConstants;
 
+import static java.lang.Math.ceil;
+
 /**
  * 第二技能叠层绘制。完全仿照 SBW 的 DecoyOverlayHelper：
  * 传 VehicleEntity + GuiGraphics + 屏幕坐标 + 颜色，绘制一行文字。
@@ -182,7 +184,7 @@ public final class SecondSkillOverlayHelper {
         if (cooldown > 0) {
             return Component.translatable(
                     "tips.extensiontest.second_skill.reloading",
-                    (cooldown / 20.0F),
+                    (int)ceil(cooldown / 20.0F),
                     keyName
             );
         }

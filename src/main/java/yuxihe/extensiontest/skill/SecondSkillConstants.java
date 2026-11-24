@@ -11,14 +11,21 @@ public final class SecondSkillConstants {
     /** 技能冷却（tick）。20 tick = 1 秒。 */
     public static final int COOLDOWN_TICKS = 200;
 
-    /** 修理技能单次回复量。 */
-    public static final float REPAIR_AMOUNT = 20.0F;
+    /** 修理持续事件 */
+    public static final int REPAIR_DURATION = 100;
+
+    /** 修理技能回复量。 */
+    public static final float REPAIR_AMOUNT = 1.0F;
+    public static final float FIRST_REPAIR_AMOUNT = 10.0F;
 
     /** 载具 NBT 中决定技能类型的键：repair / defense。缺省为 repair。 */
     public static final String NBT_SKILL_TYPE = "SecondSkillType";
 
     public static final String SKILL_REPAIR = "repair";
     public static final String SKILL_DEFENSE = "defense";
+
+    public static final float COMPONENT_MAX_HEALTH = 500.0F;
+
 
     private SecondSkillConstants() {}
 }

@@ -53,6 +53,14 @@ public abstract class VehicleEntityMixin implements ISecondSkillVehicle {
         self.getEntityData().define(DATA_SECOND_SKILL_CD, 0);
     }
 
+    // 使用修理技能后修理时长内每刻触发
+    private void repairTick(VehicleEntity vehicle){
+        vehicle.setHealth(Mth.clamp(
+                vehicle.getHealth() + SecondSkillConstants.REPAIR_AMOUNT,
+                0.0F,
+                vehicle.getMaxHealth()));
+    }
+
     // ---------------------------------------------------------------------
     // 1) 解析 keys 位：等价于 SBW processInput 里 setDecoyInputDown(...)
     // ---------------------------------------------------------------------
@@ -79,6 +87,9 @@ public abstract class VehicleEntityMixin implements ISecondSkillVehicle {
         int cooldown = this.extensiontest$getSecondSkillCooldown();
         if (cooldown > 0) {
             this.extensiontest$setSecondSkillCooldown(cooldown - 1);
+
+            // 按下修理后一段时间内持续修理
+            if(cooldown >= SecondSkillConstants.COOLDOWN_TICKS - SecondSkillConstants.REPAIR_DURATION)repairTick(self);
         }
 
         boolean down = this.extensiontest$getSecondSkillInput();
@@ -112,10 +123,18 @@ public abstract class VehicleEntityMixin implements ISecondSkillVehicle {
     /** 修理：直接回血，钳制到最大生命值。 */
     @Unique
     private void extensiontest$repair(VehicleEntity vehicle) {
+        //恢复车体血量
         vehicle.setHealth(Mth.clamp(
-                vehicle.getHealth() + SecondSkillConstants.REPAIR_AMOUNT,
+                vehicle.getHealth() + SecondSkillConstants.FIRST_REPAIR_AMOUNT,
                 0.0F,
                 vehicle.getMaxHealth()));
+
+        //彻底修理所有模块
+        vehicle.setTurretHealth(SecondSkillConstants.COMPONENT_MAX_HEALTH);
+        vehicle.setMainEngineHealth(SecondSkillConstants.COMPONENT_MAX_HEALTH);
+        vehicle.setSubEngineHealth(SecondSkillConstants.COMPONENT_MAX_HEALTH);
+        vehicle.setLeftWheelHealth(SecondSkillConstants.COMPONENT_MAX_HEALTH);
+        vehicle.setRightWheelHealth(SecondSkillConstants.COMPONENT_MAX_HEALTH);
     }
 
     /**
